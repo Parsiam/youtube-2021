@@ -1,14 +1,33 @@
 import express from "express";
 import morgan from "morgan";
+import session from "express-session";
+import MongoStore from "connect-mongo";
 
-const PORT = process.env.PORT || 4000;
+import rootRouter from "./router/rootRouter";
+import videoRouter from "./router/videoRouter";
+import { localsMiddleWare } from "./middlewares";
 
 const app = express();
 
+app.set("view engine", "pug");
+app.set("views", process.cwd() + "/src/views");
+
 app.use(morgan("tiny"));
-app.get("/", (req, res) => res.send("home"));
+app.use(express.urlencoded({ extended: true }));
+app.use(
+  session({
+    secret: process.env.COOKIE_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      maxAge: 86400000,
+    },
+    store: MongoStore.create({ mongoUrl: process.env.DB_URL }),
+  })
+);
+app.use(localsMiddleWare);
 
-const handleListening = () =>
-  console.log(`✅ Server listenting on http://localhost:${PORT}`);
+app.use("/", rootRouter);
+app.use("/video", videoRouter);
 
-app.listen(PORT, handleListening);
+export default app;

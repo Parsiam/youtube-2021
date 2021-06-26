@@ -1,0 +1,14 @@
+extends base
+
+block content   
+    h1 Home!
+    each item in videos 
+        li=item.title 
+        li=item.description
+        li=item.createdAT
+    form(method="POST")
+        input(name="title" type="text" placeholder="title") 
+        input(name="description" type="text" placeholder="description") 
+        input(name="hashtags" type="text" placeholder="hashtags") 
+        
+        button submit

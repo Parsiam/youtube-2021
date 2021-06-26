@@ -1,0 +1,12 @@
+extends base
+
+block content   
+    if error
+        span=error
+    form(method="POST")    
+        input(name="email" type="email" placeholder="email" required=true) 
+        input(name="firstName" type="text" placeholder="firstName" required=true) 
+        input(name="lastName" type="text" placeholder="lastName" required=true) 
+        input(name="password" type="password" placeholder="password" required=true) 
+        input(name="password2" type="password" placeholder="paswword2" required=true) 
+        input(type="submit" value="제출")

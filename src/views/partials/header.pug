@@ -1,0 +1,8 @@
+header 
+    span Hello I'm header
+    a(href="/") HOME
+    if isLoggedIn
+        a(href="/logout") 로그아웃
+    else
+        a(href="/login") 로그인
+        a(href="/create-account") 회원가입
