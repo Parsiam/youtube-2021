@@ -11,24 +11,29 @@ import {
   getMe,
   postME,
 } from "../controller/userController";
-import { uploadImg } from "../middlewares";
+import { loggedInUserOnly, publicOnly, uploadImg } from "../middlewares";
 
 const userRouter = express.Router();
 
 userRouter
   .route("/create-account")
+  .all(publicOnly)
   .get(getCreateAccount)
   .post(postCreateAccount);
 
-userRouter.route("/login").get(getLogin).post(postLogin);
+userRouter.route("/login").all(publicOnly).get(getLogin).post(postLogin);
 
-userRouter.get("/logout", getLogout);
+userRouter.get("/logout", publicOnly, getLogout);
 
-userRouter.get("/github/start", ghStart);
+userRouter.get("/github/start", publicOnly, ghStart);
 
-userRouter.get("/github/finish", ghFinish);
+userRouter.get("/github/finish", publicOnly, ghFinish);
 
-userRouter.route("/me").get(getMe).post(uploadImg.single("avatar"), postME);
+userRouter
+  .route("/me")
+  .all(loggedInUserOnly)
+  .get(getMe)
+  .post(uploadImg.single("avatar"), postME);
 
 userRouter.get("/:id", userProfile);
 

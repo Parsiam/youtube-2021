@@ -5,12 +5,13 @@ import {
   getUpload,
   postUpload,
 } from "../controller/videoController";
-import { uploadVideo } from "../middlewares";
+import { loggedInUserOnly, uploadVideo } from "../middlewares";
 
 const videoRouter = express.Router();
 
 videoRouter
   .route("/upload")
+  .all(loggedInUserOnly)
   .get(getUpload)
   .post(uploadVideo.single("video"), postUpload);
 
