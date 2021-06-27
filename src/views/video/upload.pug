@@ -1,0 +1,9 @@
+extends ../base
+
+block content 
+    form(method="POST" enctype="multipart/form-data" class="flex flex-col")
+        input(type="file" name="video" accept="video/*" required)
+        input(type="text" placeholder="title" name="title" required)
+        input(type="text" placeholder="description" name="description" required)
+        input(type="text" placeholder="hashtags" name="hashtags" required)
+        input(type="submit" value="제출")

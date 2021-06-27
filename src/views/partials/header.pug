@@ -1,10 +1,10 @@
-header 
-    span Hello I'm header
-    a(href="/") HOME
+header(class="my-10 flex")     
+    a(href="/" class="btn") HOME
     if isLoggedIn
-        a(href="/user/logout") 로그아웃
-        div     
-            span=user.email
+        a(href="/user/logout" class="btn") 로그아웃
+        a(href="/user/me" class="btn") 내 정보
+        a(href="/video/upload" class="btn") 영상 업로드
+        
     else
-        a(href="/user/login") 로그인
-        a(href="/user/create-account") 회원가입
+        a(href="/user/login" class="btn") 로그인
+        a(href="/user/create-account" class="btn") 회원가입

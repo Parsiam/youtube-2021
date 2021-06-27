@@ -1,0 +1,12 @@
+extends ../base
+
+block content  
+    form(method="POST" enctype="multipart/form-data" class="flex flex-col")
+        label(for="avatar") 사진 업로드     
+        input(type="file" accept="image/*" id="avatar" name="avatar")
+        input(type="text" name="firstName" placeholder="first Name" value=localUser.firstName)
+        input(type="text" name="lastName" placeholder="last Name" value=localUser.lastName)
+        input(type="submit" value="변경")
+
+    img(src="/" + localUser.avatarURL)
+    span=localUser.email

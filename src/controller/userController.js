@@ -2,13 +2,13 @@ import User from "../models/User";
 import bcrypt from "bcrypt";
 import fetch from "node-fetch";
 
-export const getLogin = (req, res) => res.render("login");
+export const getLogin = (req, res) => res.render("user/login");
 
 export const postLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email, social: false });
 
     if (!user) {
       return res
@@ -36,7 +36,7 @@ export const getLogout = (req, res) => {
   return res.redirect("/");
 };
 
-export const getCreateAccount = (req, res) => res.render("create-account");
+export const getCreateAccount = (req, res) => res.render("user/create-account");
 
 export const postCreateAccount = async (req, res) => {
   const { email, firstName, lastName, password, password2 } = req.body;
@@ -106,7 +106,7 @@ export const ghFinish = async (req, res) => {
   const checkEmail = await User.exists({ email, social: false });
   if (checkEmail) {
     return res
-      .status(200)
+      .status(400)
       .render("login", { error: "해당 이메일이 존재합니다." });
   }
   let user = {};
@@ -118,9 +118,48 @@ export const ghFinish = async (req, res) => {
       password: "",
     });
   }
-
+  console.log(user);
   req.session.loggedIn = true;
   req.session.user = user;
 
-  return res.status(200).redirect("/");
+  return res.redirect("/");
+};
+
+export const userProfile = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id);
+
+    return res.render("user/profile.pug", { user });
+  } catch (error) {}
+};
+
+export const getMe = (req, res) => {
+  return res.render("user/me");
+};
+
+export const postME = async (req, res) => {
+  try {
+    const {
+      file,
+      body: { firstName, lastName },
+      session: {
+        user: { _id, avatarURL },
+      },
+    } = req;
+
+    const user = await User.findByIdAndUpdate(
+      _id,
+      {
+        avatarURL: file ? file.path : avatarURL,
+        firstName,
+        lastName,
+      },
+      { new: true }
+    );
+
+    req.session.user = user;
+
+    return res.redirect("/user/me");
+  } catch (error) {}
 };

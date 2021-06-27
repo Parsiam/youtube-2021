@@ -1,8 +1,6 @@
-extends base
+extends ../base
 
 block content   
-    if error
-        span=error
     form(method="POST")    
         input(name="email" type="email" placeholder="email" required=true) 
         input(name="firstName" type="text" placeholder="firstName" required=true) 

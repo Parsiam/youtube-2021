@@ -7,7 +7,11 @@ import {
   getLogout,
   ghStart,
   ghFinish,
+  userProfile,
+  getMe,
+  postME,
 } from "../controller/userController";
+import { uploadImg } from "../middlewares";
 
 const userRouter = express.Router();
 
@@ -23,5 +27,9 @@ userRouter.get("/logout", getLogout);
 userRouter.get("/github/start", ghStart);
 
 userRouter.get("/github/finish", ghFinish);
+
+userRouter.route("/me").get(getMe).post(uploadImg.single("avatar"), postME);
+
+userRouter.get("/:id", userProfile);
 
 export default userRouter;
