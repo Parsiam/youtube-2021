@@ -2,7 +2,9 @@ header
     span Hello I'm header
     a(href="/") HOME
     if isLoggedIn
-        a(href="/logout") 로그아웃
+        a(href="/user/logout") 로그아웃
+        div     
+            span=user.email
     else
-        a(href="/login") 로그인
-        a(href="/create-account") 회원가입
+        a(href="/user/login") 로그인
+        a(href="/user/create-account") 회원가입

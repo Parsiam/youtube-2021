@@ -1,5 +1,6 @@
 import User from "../models/User";
 import bcrypt from "bcrypt";
+import fetch from "node-fetch";
 
 export const getLogin = (req, res) => res.render("login");
 
@@ -60,4 +61,66 @@ export const postCreateAccount = async (req, res) => {
     password,
   });
   return res.redirect("/");
+};
+
+export const ghStart = (req, res) => {
+  const baseURL = "https://github.com/login/oauth/authorize";
+  const config = {
+    client_id: process.env.GH_CLIENT,
+    allow_signup: false,
+    scope: "read:user user:email",
+  };
+  const configURL = new URLSearchParams(config).toString();
+  const finalURL = `${baseURL}?${configURL}`;
+  res.redirect(finalURL);
+};
+
+export const ghFinish = async (req, res) => {
+  const { code } = req.query;
+  const baseURL = "https://github.com/login/oauth/access_token";
+  const config = {
+    client_id: process.env.GH_CLIENT,
+    client_secret: process.env.GH_SECRET,
+    code,
+  };
+  const configURL = new URLSearchParams(config).toString();
+  const finalURL = `${baseURL}?${configURL}`;
+
+  const { access_token } = await (
+    await fetch(finalURL, {
+      method: "POST",
+      headers: { Accept: "application/json" },
+    })
+  ).json();
+
+  const emails = await (
+    await fetch("https://api.github.com/user/emails", {
+      headers: { Authorization: `token ${access_token}` },
+    })
+  ).json();
+
+  const { email } = emails.find(
+    (email) => email.verified === true && email.primary === true
+  );
+
+  const checkEmail = await User.exists({ email, social: false });
+  if (checkEmail) {
+    return res
+      .status(200)
+      .render("login", { error: "해당 이메일이 존재합니다." });
+  }
+  let user = {};
+  user = await User.findOne({ email, social: true });
+  if (!user) {
+    user = await User.create({
+      email,
+      social: true,
+      password: "",
+    });
+  }
+
+  req.session.loggedIn = true;
+  req.session.user = user;
+
+  return res.status(200).redirect("/");
 };
