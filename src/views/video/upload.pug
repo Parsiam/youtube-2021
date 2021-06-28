@@ -1,9 +1,16 @@
 extends ../base
 
 block content 
+    button.border.p-5#toggleBtn 짧은 동영상 녹화하기
+    div
+        video.mx-auto.hidden
+        button#recordBtn 시작
     form(method="POST" enctype="multipart/form-data" class="flex flex-col")
         input(type="file" name="video" accept="video/*" required)
         input(type="text" placeholder="title" name="title" required)
         input(type="text" placeholder="description" name="description" required)
         input(type="text" placeholder="hashtags" name="hashtags" required)
         input(type="submit" value="제출")
+
+block script 
+    script(src="/static/js/recorder.js") 

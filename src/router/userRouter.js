@@ -23,7 +23,7 @@ userRouter
 
 userRouter.route("/login").all(publicOnly).get(getLogin).post(postLogin);
 
-userRouter.get("/logout", publicOnly, getLogout);
+userRouter.get("/logout", loggedInUserOnly, getLogout);
 
 userRouter.get("/github/start", publicOnly, ghStart);
 
