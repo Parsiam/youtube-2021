@@ -3,9 +3,10 @@ html(lang="ko")
     head
         title #{pageTitle} - MeTube
         link(rel="stylesheet", href="/static/styles/styles.css")
-    body(class="container mx-auto")
-       
+    body.container.mx-auto.bg-gray-100
         include partials/header
         main
             block content
         include partials/footer
+        script(src="https://kit.fontawesome.com/6478f529f2.js" crossorigin="anonymous")
+        block script

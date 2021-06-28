@@ -5,3 +5,11 @@
 .btn {
   @apply p-5 border hover:bg-gray-400 transition-colors;
 }
+
+#videoContainer {
+  width: 1280px;
+}
+
+i:hover {
+  color: red;
+}

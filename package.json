@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --exec babel-node src/init.js",
+    "start": "nodemon",
+    "assets": "webpack",
     "prebuild": "npm run tailwind:prodbuild",
     "tailwind:build": "tailwind build -i ./src/styles/tailwind.css -o ./assets/styles/styles.css",
     "tailwind:prodbuild": "NODE_ENV=production npm run tailwind:build"
@@ -26,9 +27,12 @@
     "@babel/node": "^7.14.7",
     "@babel/preset-env": "^7.14.7",
     "autoprefixer": "^10.2.6",
+    "babel-loader": "^8.2.2",
     "nodemon": "^2.0.7",
     "postcss": "^8.3.5",
-    "tailwindcss": "^2.2.4"
+    "tailwindcss": "^2.2.4",
+    "webpack": "^5.40.0",
+    "webpack-cli": "^4.7.2"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
