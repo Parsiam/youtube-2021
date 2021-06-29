@@ -6,7 +6,7 @@ block content
         label(for="avatar").label 프로필 사진
         input(type="file" accept="image/*" id="avatar" name="avatar").input
         label(for="userName").label 닉네임
-        input(type="text" name="userName" placeholder="닉네임" value=localUser.userName id="userName").input
+        input(type="text" name="userName" placeholder="닉네임" value=localUser.userName id="userName" maxLength=20).input
         button.submitBtn 수정
 
     

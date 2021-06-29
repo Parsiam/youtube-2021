@@ -1,7 +1,9 @@
 extends ../base
 
 block content 
-    div#videoContainer.relative
+    if String(video.owner._id) === String(localUser._id)
+        a(href=`/video/${video._id}/delete`) 삭제하기
+    div#videoContainer.relative.width-1080
         video(src="/" + video.fileURL data-id=video._id).w-full
         div#videoController.w-full.px-5.absolute.bottom-10.opacity-0.transition-opacity
             div.flex.mb-5
@@ -20,15 +22,34 @@ block content
     div.flex.flex-col.mt-5
         span.text-2xl.font-medium=video.title
         span.text-lg.text-gray-500.mt-2 조회수 #{video.meta.views}회 · #{video.createdAt.getFullYear()}. #{video.createdAt.getMonth()+1}. #{video.createdAt.getDate()}.
-    div.flex.border-t.border-b.py-5.my-5(style="width:1080px")
+    div.flex.border-t.border-b.py-5.my-5.width-1080
         a(href=`/user/${video.owner._id}`)
-            div(style=`background-image:url(${"/" + video.owner.avatarURL});background-size:cover;background-position:center; width:70px;height:70px`).rounded-full
-        div.ml-6(style="width:1000px")
-            div.text-lg.font-semibold=video.owner.userName
-            div.text-gray-500.mt-5=video.description
-    
-    
-    if String(video.owner._id) === String(localUser._id)
-        a(href=`/video/${video._id}/delete`) 삭제하기
+            div(style=`background-image:url(${video.owner.avatarURL.includes("http") ? video.owner.avatarURL : "/" + video.owner.avatarURL});background-size:cover;background-position:center; width:70px;height:70px`).rounded-full
+        div.ml-6.w-full
+            a(href=`/user/${video.owner._id}`)
+                span.text-lg.font-semibold=video.owner.userName
+            div.text-gray-500.mt-2=video.description
+    div.text-xl.mb-5
+        span 댓글 
+        span#commentTotal=video.comments.length
+        span 개
+    if isLoggedIn
+        form#commentForm.width-1080.flex.flex-col
+            input#commentInput(type="text" placeholder="공개 댓글 추가..." class="w-full bg-transparent pb-1 border-b focus:outline-none focus:border-black" maxLength=100)
+            div.flex.justify-between
+                div(class="pointer-events-none")
+                button#commentBtn.px-7.py-3.mt-2.rounded-md.font-medium.bg-gray-200.text-gray-600.pointer-events-none 댓글
+    section#commentList.mt-5.width-1080.px-1(data-url=localUser.avatarURL data-name=localUser.userName)
+        each comment in video.comments.reverse()
+            div.flex.mb-5(data-id=comment._id)
+                div(style=`background-image:url(${comment.owner.avatarURL.includes("http") ? comment.owner.avatarURL : "/" + comment.owner.avatarURL});background-size:cover;background-position:center; width:50px;height:50px`).rounded-full
+                div.flex.justify-between.w-full.items-center
+                    div.ml-5.flex.flex-col 
+                        span.font-semibold=comment.owner.userName
+                        span=comment.text
+                    div 
+                        if String(comment.owner._id) === String(localUser._id)
+                            i.fas.fa-trash.icon-hover
 block script    
-    script(src="/static/js/videoPlayer.js" defer) 
+    script(src="/static/js/videoPlayer.js" defer)
+    script(src="/static/js/comment.js" defer)

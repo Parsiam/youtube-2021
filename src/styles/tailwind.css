@@ -10,7 +10,7 @@ body {
   @apply hover:opacity-60 transition-opacity text-xl;
 }
 
-#videoContainer {
+.width-1080 {
   width: 1080px;
 }
 
@@ -32,4 +32,8 @@ body {
 
 .submitBtn {
   @apply bg-blue-700 text-white  mx-auto py-3 px-6 rounded-md text-lg font-medium focus:outline-none hover:opacity-80 transition-opacity;
+}
+
+.icon-hover {
+  @apply hover:scale-125 hover:text-red-600 transform transition-transform cursor-pointer;
 }

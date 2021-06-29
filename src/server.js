@@ -33,6 +33,7 @@ app.use(localsMiddleWare);
 
 app.use("/uploads", express.static("uploads"));
 app.use("/static", express.static("assets"));
+app.use(express.json());
 
 app.use("/", rootRouter);
 app.use("/video", videoRouter);

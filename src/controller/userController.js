@@ -14,7 +14,7 @@ export const postLogin = async (req, res) => {
     if (!user) {
       return res
         .status(400)
-        .render("login", { error: "해당 이메일이 존재하지 않습니다." });
+        .render("user/login", { error: "해당 이메일이 존재하지 않습니다." });
     }
 
     const ok = await bcrypt.compare(password, user.password);
@@ -22,14 +22,16 @@ export const postLogin = async (req, res) => {
     if (!ok) {
       return res
         .status(400)
-        .render("login", { error: "비밀번호가 일치하지 않습니다." });
+        .render("user/login", { error: "비밀번호가 일치하지 않습니다." });
     }
 
     req.session.loggedIn = true;
     req.session.user = user;
 
     return res.redirect("/");
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const getLogout = (req, res) => {
