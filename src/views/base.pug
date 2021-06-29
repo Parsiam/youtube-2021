@@ -3,11 +3,12 @@ html(lang="ko")
     head
         title #{pageTitle} - MeTube
         link(rel="stylesheet", href="/static/styles/styles.css")
-    body.container.mx-auto.bg-gray-100
+        link(rel="icon" href="https://www.youtube.com/s/desktop/f73a46b5/img/favicon_32x32.png")
+        script(src="https://kit.fontawesome.com/6478f529f2.js" crossorigin="anonymous")
+        script(src="/static/js/main.js" defer)
+        block script
+    body
         include partials/header
-        main
+        main.w-full.p-10.container.mx-auto.mt-16
             block content
         include partials/footer
-        script(src="https://kit.fontawesome.com/6478f529f2.js" crossorigin="anonymous")
-        script(src="/static/js/main.js")
-        block script

@@ -2,7 +2,7 @@ extends ../base
 
 block content 
     div#videoContainer.relative
-        video(src="/" + video.fileURL).w-full
+        video(src="/" + video.fileURL data-id=video._id).w-full
         div#videoController.w-full.px-5.absolute.bottom-10.opacity-0.transition-opacity
             div.flex.mb-5
                 input(type="range" min=0 step=1 value=0)#timeRange.flex-1
@@ -16,16 +16,19 @@ block content
                     i.fas.fa-volume-up.fa-2x.mr-5#muteBtn
                     input(type="range" min=0 max=1 step=0.1 value=0.5)#volumeRange
                 div
-                    i.fas.fa-expand.fa-2x#fullBtn
-                
-    div.flex.flex-col
-        span title : #{video.title}
-        span description : #{video.description}
-        span createdAt : #{video.createdAt}
-        span views : #{video.meta.views}
-        span owner : #{video.owner.email}
+                    i.fas.fa-expand.fa-2x#fullBtn               
+    div.flex.flex-col.mt-5
+        span.text-2xl.font-medium=video.title
+        span.text-lg.text-gray-500.mt-2 조회수 #{video.meta.views}회 · #{video.createdAt.getFullYear()}. #{video.createdAt.getMonth()+1}. #{video.createdAt.getDate()}.
+    div.flex.border-t.border-b.py-5.my-5(style="width:1080px")
+        a(href=`/user/${video.owner._id}`)
+            div(style=`background-image:url(${"/" + video.owner.avatarURL});background-size:cover;background-position:center; width:70px;height:70px`).rounded-full
+        div.ml-6(style="width:1000px")
+            div.text-lg.font-semibold=video.owner.userName
+            div.text-gray-500.mt-5=video.description
+    
+    
     if String(video.owner._id) === String(localUser._id)
         a(href=`/video/${video._id}/delete`) 삭제하기
-
 block script    
-    script(src="/static/js/videoPlayer.js") 
+    script(src="/static/js/videoPlayer.js" defer) 

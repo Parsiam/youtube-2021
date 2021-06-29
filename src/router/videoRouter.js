@@ -13,9 +13,15 @@ videoRouter
   .route("/upload")
   .all(loggedInUserOnly)
   .get(getUpload)
-  .post(uploadVideo.single("video"), postUpload);
+  .post(
+    uploadVideo.fields([
+      { name: "video", maxCount: 1 },
+      { name: "thumbnail", maxCount: 1 },
+    ]),
+    postUpload
+  );
 
 videoRouter.get("/:id", getDetail);
-videoRouter.get("/:id/delete", getDelete);
+videoRouter.get("/:id/delete", loggedInUserOnly, getDelete);
 
 export default videoRouter;

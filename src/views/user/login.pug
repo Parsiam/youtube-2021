@@ -1,8 +1,14 @@
 extends ../base
 
 block content   
-    form(method="POST")
-        input(name="email" type="email" placeholder="email" required=true) 
-        input(name="password" type="password" placeholder="password" required=true)  
-        input(type="submit" value="제출")
-    a(href="/user/github/start" class="btn my-5") github
+    form(method="POST").form
+        label(for="email").label 이메일 주소
+        input(name="email" type="email" placeholder="이메일 주소" required id="email").input
+        label(for="password").label 비밀번호
+        input(name="password" type="password" placeholder="비밀번호" required id="password").input
+        button.submitBtn 로그인
+        a(href="/user/github/start").mx-auto.mt-14
+            div(class="flex items-center w-80 justify-center text-2xl text-white bg-black px-4 py-2 rounded-md hover:opacity-80 transition-opacity")
+                i.fab.fa-github
+                span.mx-5 깃허브 로그인
+                i.fas.fa-arrow-right

@@ -26,8 +26,12 @@ const init = async () => {
 };
 
 const handleToggle = () => {
-  video.classList.remove("hidden");
-  init();
+  video.classList.toggle("hidden");
+  if (!video.classList.contains("hidden")) {
+    init();
+  } else {
+    video.srcObject = null;
+  }
 };
 
 const handleStart = () => {

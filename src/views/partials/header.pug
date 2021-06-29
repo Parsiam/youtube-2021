@@ -1,10 +1,16 @@
-header(class="my-10 flex")     
-    a(href="/" class="btn") HOME
+header.bg-white.py-3.px-20.items-center.fixed.top-0.w-full.flex.z-10
+    div(class="w-1/3")
+        a(href="/" class="hover:opacity-60 transition-opacity")
+            i.fab.fa-youtube.text-red-600.text-5xl
+    form(class="w-1/3")
+        input(type="text" placeholder="검색" class="w-full border shadow-inner  border-gray-500  py-2 px-2 text-xl focus:outline-none")
     if isLoggedIn
-        a(href="/user/logout" class="btn") 로그아웃
-        a(href="/user/me" class="btn") 내 정보
-        a(href="/video/upload" class="btn") 영상 업로드
+        div(class="w-1/3 flex justify-end")
+            a(href="/video/upload").header 동영상 업로드
+            a(href="/user/me").header.ml-5 내 정보
+            a(href="/user/logout").header.ml-5 로그아웃
         
     else
-        a(href="/user/login" class="btn") 로그인
-        a(href="/user/create-account" class="btn") 회원가입
+        div(class="w-1/3 flex justify-end")
+            a(href="/user/create-account").header 회원가입
+            a(href="/user/login").header.ml-5 로그인

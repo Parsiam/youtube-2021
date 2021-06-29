@@ -4,10 +4,13 @@ import bcrypt from "bcrypt";
 const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   social: { type: Boolean, required: true, default: false },
-  firstName: { type: String },
-  lastName: { type: String },
+  userName: { type: String, required: true, default: "user" },
   password: { type: String },
-  avatarURL: { type: String },
+  avatarURL: {
+    type: String,
+    default:
+      "https://res.cloudinary.com/betula/image/upload/v1623148866/gsrslupcr0ue7n6llm3n.png",
+  },
   videos: [{ type: mongoose.Types.ObjectId, ref: "Video" }],
 });
 

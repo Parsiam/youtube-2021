@@ -1,9 +1,7 @@
 extends base
+include mixins/video
 
-block content   
-
-    each item in videos 
-        a(href=`/video/${item._id}`) 디테일
-        li=item.title 
-        li=item.description
-        li=item.createdAT
+block content  
+    div(class="grid grid-cols-4 gap-y-10")
+        each item in videos 
+            +video(item)

@@ -2,14 +2,34 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  background: #f9f9f9;
+}
+
+.header {
+  @apply hover:opacity-60 transition-opacity text-xl;
+}
+
+#videoContainer {
+  width: 1080px;
+}
+
 .btn {
   @apply p-5 border hover:bg-gray-400 transition-colors;
 }
 
-#videoContainer {
-  width: 1280px;
+.label {
+  @apply font-bold text-xl mb-3;
 }
 
-i:hover {
-  color: red;
+.form {
+  @apply flex flex-col w-1/2 mx-auto border bg-gray-100 rounded-md px-5 py-10;
+}
+
+.input {
+  @apply w-full px-4 py-5 focus:outline-none focus:ring rounded-md mb-5 border text-lg bg-white;
+}
+
+.submitBtn {
+  @apply bg-blue-700 text-white  mx-auto py-3 px-6 rounded-md text-lg font-medium focus:outline-none hover:opacity-80 transition-opacity;
 }

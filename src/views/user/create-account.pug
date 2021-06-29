@@ -1,10 +1,13 @@
 extends ../base
 
 block content   
-    form(method="POST")    
-        input(name="email" type="email" placeholder="email" required=true) 
-        input(name="firstName" type="text" placeholder="firstName" required=true) 
-        input(name="lastName" type="text" placeholder="lastName" required=true) 
-        input(name="password" type="password" placeholder="password" required=true) 
-        input(name="password2" type="password" placeholder="paswword2" required=true) 
-        input(type="submit" value="제출")
+    form(method="POST").form
+        label(for="email").label 이메일 주소
+        input(name="email" type="email" placeholder="이메일 주소" required id="email").input
+        label(for="userName").label 닉네임
+        input(name="userName" type="text" placeholder="닉네임" required id="userName").input
+        label(for="password").label 비밀번호
+        input(name="password" type="password" placeholder="비밀번호" required id="password").input
+        label(for="password2").label 비밀번호 확인
+        input(name="password2" type="password" placeholder="비밀번호 확인" required id="password2").input
+        button.submitBtn 회원가입

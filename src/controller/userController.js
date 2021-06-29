@@ -2,7 +2,8 @@ import User from "../models/User";
 import bcrypt from "bcrypt";
 import fetch from "node-fetch";
 
-export const getLogin = (req, res) => res.render("user/login");
+export const getLogin = (req, res) =>
+  res.render("user/login", { pageTitle: "로그인" });
 
 export const postLogin = async (req, res) => {
   try {
@@ -36,10 +37,11 @@ export const getLogout = (req, res) => {
   return res.redirect("/");
 };
 
-export const getCreateAccount = (req, res) => res.render("user/create-account");
+export const getCreateAccount = (req, res) =>
+  res.render("user/create-account", { pageTitle: "회원가입" });
 
 export const postCreateAccount = async (req, res) => {
-  const { email, firstName, lastName, password, password2 } = req.body;
+  const { email, userName, password, password2 } = req.body;
 
   const user = await User.exists({ email });
 
@@ -56,8 +58,7 @@ export const postCreateAccount = async (req, res) => {
   }
   await User.create({
     email,
-    firstName,
-    lastName,
+    userName,
     password,
   });
   return res.redirect("/");
@@ -118,7 +119,7 @@ export const ghFinish = async (req, res) => {
       password: "",
     });
   }
-  console.log(user);
+
   req.session.loggedIn = true;
   req.session.user = user;
 
@@ -135,14 +136,14 @@ export const userProfile = async (req, res) => {
 };
 
 export const getMe = (req, res) => {
-  return res.render("user/me");
+  return res.render("user/me", { pageTitle: "내 정보" });
 };
 
 export const postME = async (req, res) => {
   try {
     const {
       file,
-      body: { firstName, lastName },
+      body: { userName },
       session: {
         user: { _id, avatarURL },
       },
@@ -152,8 +153,7 @@ export const postME = async (req, res) => {
       _id,
       {
         avatarURL: file ? file.path : avatarURL,
-        firstName,
-        lastName,
+        userName,
       },
       { new: true }
     );

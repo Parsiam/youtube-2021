@@ -114,6 +114,13 @@ const handleMove = () => {
   mouseOnScreen = setTimeout(handleLeave, 3000);
 };
 
+const handleView = () => {
+  const { id } = video.dataset;
+  return fetch(`/api/video/${id}/view`, {
+    method: "POST",
+  });
+};
+
 playBtn.addEventListener("click", handlePlay);
 video.addEventListener("click", handlePlay);
 muteBtn.addEventListener("click", handleMute);
@@ -126,3 +133,4 @@ addEventListener("keypress", handleSpaceBar);
 videoContainer.addEventListener("mouseenter", handleEnter);
 videoContainer.addEventListener("mouseleave", handleLeave);
 videoContainer.addEventListener("mousemove", handleMove);
+video.addEventListener("ended", handleView);

@@ -1,12 +1,12 @@
 extends ../base
 
 block content  
-    form(method="POST" enctype="multipart/form-data" class="flex flex-col")
-        label(for="avatar") 사진 업로드     
-        input(type="file" accept="image/*" id="avatar" name="avatar")
-        input(type="text" name="firstName" placeholder="first Name" value=localUser.firstName)
-        input(type="text" name="lastName" placeholder="last Name" value=localUser.lastName)
-        input(type="submit" value="변경")
+    form(method="POST" enctype="multipart/form-data" class="flex flex-col").form
+        img(src=localUser.avatarURL.includes("http") ? localUser.avatarURL : "/" + localUser.avatarURL ).mx-auto.rounded-full.w-52.h-52.mb-10
+        label(for="avatar").label 프로필 사진
+        input(type="file" accept="image/*" id="avatar" name="avatar").input
+        label(for="userName").label 닉네임
+        input(type="text" name="userName" placeholder="닉네임" value=localUser.userName id="userName").input
+        button.submitBtn 수정
 
-    img(src="/" + localUser.avatarURL)
-    span=localUser.email
+    
