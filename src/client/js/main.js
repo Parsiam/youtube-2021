@@ -1,2 +1,1 @@
-import regenerator from "regenerator-runtime";
-console.log("main");
+import regeneratorRuntime from "regenerator-runtime";

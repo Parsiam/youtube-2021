@@ -115,3 +115,31 @@ export const addComment = async (req, res) => {
     return res.status(201).send(comment._id);
   } catch (error) {}
 };
+
+export const deleteComment = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const comment = await Comment.exists({ _id: id });
+    if (!comment) {
+      return res.sendStatus(404);
+    }
+    await Comment.findByIdAndDelete(id);
+    return res.sendStatus(204);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getSearch = async (req, res) => {
+  const { search_query } = req.query;
+  let videos = [];
+  if (search_query) {
+    videos = await Video.find({
+      title: {
+        $regex: new RegExp(`${search_query}$`, "i"),
+      },
+    }).populate("owner");
+  }
+  res.render("video/search", { pageTitle: search_query, videos, search_query });
+};

@@ -1,0 +1,7 @@
+extends ../base
+include ../mixins/video
+
+block content 
+    div(class="grid grid-cols-4 gap-y-10")
+    each item in videos 
+        +video(item)

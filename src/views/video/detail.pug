@@ -44,7 +44,7 @@ block content
             div.flex.mb-5(data-id=comment._id)
                 div(style=`background-image:url(${comment.owner.avatarURL.includes("http") ? comment.owner.avatarURL : "/" + comment.owner.avatarURL});background-size:cover;background-position:center; width:50px;height:50px`).rounded-full
                 div.flex.justify-between.w-full.items-center
-                    div.ml-5.flex.flex-col 
+                    div.ml-5.flex.flex-col
                         span.font-semibold=comment.owner.userName
                         span=comment.text
                     div 
@@ -53,3 +53,4 @@ block content
 block script    
     script(src="/static/js/videoPlayer.js" defer)
     script(src="/static/js/comment.js" defer)
+    <script>const hello = ()=>console.log("wow")</script>

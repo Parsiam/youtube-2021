@@ -2,8 +2,8 @@ header.bg-white.py-3.px-20.items-center.fixed.top-0.w-full.flex.z-10
     div(class="w-1/3")
         a(href="/" class="hover:opacity-60 transition-opacity")
             i.fab.fa-youtube.text-red-600.text-5xl
-    form(class="w-1/3")
-        input(type="text" placeholder="검색" class="w-full border shadow-inner  border-gray-500  py-2 px-2 text-xl focus:outline-none")
+    form(class="w-1/3" action="/search" method="get") 
+        input(type="text" name="search_query" placeholder="검색" value=search_query class="w-full border shadow-inner  border-gray-500  py-2 px-2 text-xl focus:outline-none")
     if isLoggedIn
         div(class="w-1/3 flex justify-end")
             a(href="/video/upload").header 동영상 업로드

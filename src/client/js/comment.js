@@ -4,6 +4,24 @@ const commentForm = document.querySelector("#commentForm");
 const commentInput = document.querySelector("#commentInput");
 const commentBtn = document.querySelector("#commentBtn");
 const commentList = document.querySelector("#commentList");
+const trashBtn = Array.from(document.querySelectorAll(".fa-trash"));
+
+const deleteComment = async (event) => {
+  try {
+    const div = event.target.parentNode.parentNode.parentNode;
+    const { id } = div.dataset;
+
+    const response = await fetch(`/api/comment/${id}`, { method: "DELETE" });
+    if (response.status === 204) {
+      div.remove();
+      commentTotal.textContent = Number(commentTotal.textContent) - 1;
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+trashBtn.map((item) => item.addEventListener("click", deleteComment));
 
 let loading = false;
 
@@ -33,7 +51,8 @@ const handleSubmit = async (event) => {
     const div = document.createElement("div");
 
     div.classList = "flex mb-5";
-    div.dataset.id = commentId;
+    div.dataset.id = commentId.replace(/\"/gi, "");
+
     div.innerHTML = `
       <div class="rounded-full" style="background-image:url(${avatarURL});background-size:cover;background-position:center; width:50px;height:50px"></div>
       <div class="flex justify-between w-full items-center">
@@ -46,9 +65,11 @@ const handleSubmit = async (event) => {
         </div>
       </div>
       `;
+    const icon = div.querySelector("i");
+    console.log(icon);
+    icon.addEventListener("click", deleteComment);
     commentList.prepend(div);
     commentTotal.textContent = Number(commentTotal.textContent) + 1;
-
     commentInput.value = "";
   }
 };

@@ -6,11 +6,13 @@
 
 - pug
 - 자바스크립트를 사용하여 커스텀 비디오 플레이어 구현
+- 동영상 재생 완료 시 fetch를 사용하여 백엔드에 POST 요청 전송
+-
 
 ### Back-end
 
 - express, pug를 사용한 SSR 구현
-- express-session을 사용한 쿠키, 세션 방식의 로그인 구현
+- express-session을 사용한 세션 기반 로그인 구현
 
 ## ☑️ 사용한 기술
 
