@@ -34,7 +34,7 @@ export const postUpload = async (req, res) => {
     const user = await User.findById(_id);
     user.videos.push(video._id);
     await user.save();
-
+    req.flash("info", "동영상을 업로드했습니다.");
     return res.redirect("/");
   } catch (error) {
     console.log(error);
@@ -67,12 +67,15 @@ export const getDelete = async (req, res) => {
     } = req;
     const video = await Video.findById(id);
     if (!video) {
-      return res.status(404).render("404", { pageTitle: "Video not found." });
+      req.flash("error", "동영상을 삭제할 수 없습니다.");
+      return res.status(404).redirect("/");
     }
     if (String(video.owner) !== String(_id)) {
+      req.flash("error", "동영상을 삭제할 수 없습니다.");
       return res.status(403).redirect("/");
     }
     await Video.findByIdAndDelete(id);
+    req.flash("info", "동영상을 삭제했습니다.");
     return res.redirect("/");
   } catch (error) {}
 };

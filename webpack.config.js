@@ -8,8 +8,6 @@ module.exports = {
     comment: "./src/client/js/comment.js",
     search: "./src/client/js/search.js",
   },
-  mode: "development",
-  watch: true,
   output: {
     filename: "js/[name].js",
     path: path.resolve(__dirname, "assets"),

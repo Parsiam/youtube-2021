@@ -9,6 +9,10 @@ html(lang="ko")
         script(src="/static/js/search.js" defer)
         block script
     body
+        if messages.info 
+            div.message.info=messages.info
+        if messages.error 
+            div.message.error=messages.error
         include partials/header
         main.w-full.p-10.container.mx-auto.mt-16
             block content

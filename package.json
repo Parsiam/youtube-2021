@@ -4,9 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon",
-    "assets": "webpack",
-    "prebuild": "npm run tailwind:prodbuild",
+    "start": "node build/init.js",
+    "build": "npm run build:server && npm run build:assets && npm run tailwind:prodbuild",
+    "dev:server": "nodemon",
+    "dev:assets": "webpack --mode=development -w",
+    "build:server": "babel src -d build",
+    "build:assets": "webpack --mode=production",
     "tailwind:build": "tailwind build -i ./src/styles/tailwind.css -o ./assets/styles/styles.css",
     "tailwind:prodbuild": "NODE_ENV=production npm run tailwind:build"
   },

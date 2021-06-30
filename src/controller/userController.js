@@ -12,22 +12,21 @@ export const postLogin = async (req, res) => {
     const user = await User.findOne({ email, social: false });
 
     if (!user) {
-      return res
-        .status(400)
-        .render("user/login", { error: "해당 이메일이 존재하지 않습니다." });
+      req.flash("error", "해당 이메일이 존재하지 않습니다.");
+      return res.status(400).render("user/login");
     }
 
     const ok = await bcrypt.compare(password, user.password);
 
     if (!ok) {
-      return res
-        .status(400)
-        .render("user/login", { error: "비밀번호가 일치하지 않습니다." });
+      req.flash("error", "비밀번호가 일치하지 않습니다.");
+      return res.status(400).render("user/login");
     }
 
     req.session.loggedIn = true;
     req.session.user = user;
 
+    req.flash("info", "로그인에 성공했습니다.");
     return res.redirect("/");
   } catch (error) {
     console.log(error);
@@ -48,21 +47,20 @@ export const postCreateAccount = async (req, res) => {
   const user = await User.exists({ email });
 
   if (user) {
-    return res
-      .status(400)
-      .render("create-account", { error: "해당 이메일이 이미 존재합니다." });
+    req.flash("error", "해당 이메일이 이미 존재합니다.");
+    return res.status(400).render("user/create-account");
   }
 
   if (password !== password2) {
-    return res
-      .status(400)
-      .render("create-account", { error: "비밀번호가 일치하지 않습니다." });
+    req.flash("error", "비밀번호가 일치하지 않습니다.");
+    return res.status(400).render("user/create-account");
   }
   await User.create({
     email,
     userName,
     password,
   });
+  req.flash("info", "회원가입에 성공했습니다.");
   return res.redirect("/");
 };
 
@@ -79,53 +77,54 @@ export const ghStart = (req, res) => {
 };
 
 export const ghFinish = async (req, res) => {
-  const { code } = req.query;
-  const baseURL = "https://github.com/login/oauth/access_token";
-  const config = {
-    client_id: process.env.GH_CLIENT,
-    client_secret: process.env.GH_SECRET,
-    code,
-  };
-  const configURL = new URLSearchParams(config).toString();
-  const finalURL = `${baseURL}?${configURL}`;
+  try {
+    const { code } = req.query;
+    const baseURL = "https://github.com/login/oauth/access_token";
+    const config = {
+      client_id: process.env.GH_CLIENT,
+      client_secret: process.env.GH_SECRET,
+      code,
+    };
+    const configURL = new URLSearchParams(config).toString();
+    const finalURL = `${baseURL}?${configURL}`;
 
-  const { access_token } = await (
-    await fetch(finalURL, {
-      method: "POST",
-      headers: { Accept: "application/json" },
-    })
-  ).json();
+    const { access_token } = await (
+      await fetch(finalURL, {
+        method: "POST",
+        headers: { Accept: "application/json" },
+      })
+    ).json();
 
-  const emails = await (
-    await fetch("https://api.github.com/user/emails", {
-      headers: { Authorization: `token ${access_token}` },
-    })
-  ).json();
+    const emails = await (
+      await fetch("https://api.github.com/user/emails", {
+        headers: { Authorization: `token ${access_token}` },
+      })
+    ).json();
 
-  const { email } = emails.find(
-    (email) => email.verified === true && email.primary === true
-  );
+    const { email } = emails.find(
+      (email) => email.verified === true && email.primary === true
+    );
 
-  const checkEmail = await User.exists({ email, social: false });
-  if (checkEmail) {
-    return res
-      .status(400)
-      .render("login", { error: "해당 이메일이 존재합니다." });
-  }
-  let user = {};
-  user = await User.findOne({ email, social: true });
-  if (!user) {
-    user = await User.create({
-      email,
-      social: true,
-      password: "",
-    });
-  }
+    const checkEmail = await User.exists({ email, social: false });
+    if (checkEmail) {
+      req.flash("error", "해당 이메일이 이미 존재합니다.");
+      return res.status(400).render("user/login");
+    }
+    let user = {};
+    user = await User.findOne({ email, social: true });
+    if (!user) {
+      user = await User.create({
+        email,
+        social: true,
+        password: "",
+      });
+    }
 
-  req.session.loggedIn = true;
-  req.session.user = user;
-
-  return res.redirect("/");
+    req.session.loggedIn = true;
+    req.session.user = user;
+    req.flash("info", "깃허브 로그인에 성공했습니다.");
+    return res.redirect("/");
+  } catch (error) {}
 };
 
 export const userProfile = async (req, res) => {
@@ -137,9 +136,8 @@ export const userProfile = async (req, res) => {
   } catch (error) {}
 };
 
-export const getMe = (req, res) => {
-  return res.render("user/me", { pageTitle: "내 정보" });
-};
+export const getMe = (req, res) =>
+  res.render("user/me", { pageTitle: "내 정보" });
 
 export const postME = async (req, res) => {
   try {
@@ -161,7 +159,7 @@ export const postME = async (req, res) => {
     );
 
     req.session.user = user;
-
+    req.flash("info", "내 정보를 수정했습니다.");
     return res.redirect("/user/me");
   } catch (error) {}
 };
