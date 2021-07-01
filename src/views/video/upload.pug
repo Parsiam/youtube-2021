@@ -1,5 +1,8 @@
 extends ../base
 
+block script 
+    script(defer src="/static/js/recorder.js") 
+
 block content 
     div(class="border w-1/3 mx-auto text-center bg-red-600 text-white py-4 rounded-md text-lg font-medium cursor-pointer hover:opacity-80 transition-opacity mb-10")#toggleBtn 짧은 동영상 녹화하기
     div
@@ -17,6 +20,3 @@ block content
         label(for="hashtags").label 태그
         input(type="text" placeholder="각 태그의 뒤에 쉼표를 입력하세요." name="hashtags" id="hashtags").input
         button.submitBtn 동영상 업로드
-
-block script 
-    script(src="/static/js/recorder.js" defer) 

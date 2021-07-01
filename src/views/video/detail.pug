@@ -1,11 +1,15 @@
 extends ../base
 
+block script    
+    script(defer src="/static/js/videoPlayer.js" )
+    script(defer src="/static/js/comment.js")
+    
 block content 
     if String(video.owner._id) === String(localUser._id)
         a(href=`/video/${video._id}/delete`) 삭제하기
     div#videoContainer.relative.width-1080
         video(src="/" + video.fileURL data-id=video._id).w-full
-        div#videoController.w-full.px-5.absolute.bottom-10.opacity-0.transition-opacity
+        div#videoController.w-full.px-5.absolute.bottom-0.pb-6.py-2
             div.flex.mb-5
                 input(type="range" min=0 step=1 value=0)#timeRange.flex-1
                 div.mx-5.text-white.text-xl
@@ -50,7 +54,3 @@ block content
                     div 
                         if String(comment.owner._id) === String(localUser._id)
                             i.fas.fa-trash.icon-hover
-block script    
-    script(src="/static/js/videoPlayer.js" defer)
-    script(src="/static/js/comment.js" defer)
-    <script>const hello = ()=>console.log("wow")</script>

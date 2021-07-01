@@ -53,6 +53,9 @@ const handleVolume = (event) => {
 };
 
 const handleMetadata = () => {
+  if (!video.duration) {
+    return;
+  }
   const total = Math.floor(video.duration);
   totalTime.textContent = formatTime(total);
   timeRange.max = total;
@@ -97,13 +100,20 @@ const handleSpaceBar = (event) => {
   }
 };
 
+const addHidden = () => videoController.classList.add("hidden");
+const removeHidden = () => videoController.classList.remove("hidden");
+
 const handleEnter = () => {
-  videoController.classList.remove("opacity-0");
+  if (!video.paused) {
+    removeHidden();
+  }
 };
 
 const handleLeave = () => {
-  videoController.classList.add("opacity-0");
-  mouseOnScreen = null;
+  if (!video.paused) {
+    addHidden();
+    mouseOnScreen = null;
+  }
 };
 
 const handleMove = () => {
@@ -121,16 +131,18 @@ const handleView = () => {
   });
 };
 
+addEventListener("keypress", handleSpaceBar);
 playBtn.addEventListener("click", handlePlay);
-video.addEventListener("click", handlePlay);
 muteBtn.addEventListener("click", handleMute);
 volumeRange.addEventListener("input", handleVolume);
-video.addEventListener("loadedmetadata", handleMetadata);
-video.addEventListener("timeupdate", handleTimeUpdate);
 timeRange.addEventListener("input", handleTimeRange);
 fullBtn.addEventListener("click", handleScreen);
-addEventListener("keypress", handleSpaceBar);
 videoContainer.addEventListener("mouseenter", handleEnter);
 videoContainer.addEventListener("mouseleave", handleLeave);
 videoContainer.addEventListener("mousemove", handleMove);
+video.addEventListener("timeupdate", handleTimeUpdate);
+video.addEventListener("click", handlePlay);
 video.addEventListener("ended", handleView);
+video.addEventListener("pause", removeHidden);
+video.addEventListener("play", handleMove);
+video.addEventListener("progress", handleMetadata);
