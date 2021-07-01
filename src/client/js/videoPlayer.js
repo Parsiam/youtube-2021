@@ -53,9 +53,6 @@ const handleVolume = (event) => {
 };
 
 const handleMetadata = () => {
-  if (!video.duration) {
-    return;
-  }
   const total = Math.floor(video.duration);
   totalTime.textContent = formatTime(total);
   timeRange.max = total;
@@ -131,6 +128,11 @@ const handleView = () => {
   });
 };
 
+const setURL = () => {
+  const { url } = video.dataset;
+  video.src = "/" + url;
+};
+
 addEventListener("keypress", handleSpaceBar);
 playBtn.addEventListener("click", handlePlay);
 muteBtn.addEventListener("click", handleMute);
@@ -145,4 +147,6 @@ video.addEventListener("click", handlePlay);
 video.addEventListener("ended", handleView);
 video.addEventListener("pause", removeHidden);
 video.addEventListener("play", handleMove);
-video.addEventListener("progress", handleMetadata);
+video.addEventListener("loadedmetadata", handleMetadata);
+
+addEventListener("DOMContentLoaded", setURL);
