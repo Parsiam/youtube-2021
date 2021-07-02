@@ -14,6 +14,10 @@ body {
   width: 1080px;
 }
 
+.height-607 {
+  height: 607.5px;
+}
+
 .btn {
   @apply p-5 border hover:bg-gray-400 transition-colors;
 }
@@ -63,4 +67,8 @@ body {
 
 .error {
   @apply bg-red-600;
+}
+
+i:hover {
+  cursor: pointer;
 }

@@ -18,17 +18,27 @@
 
 ### Front-end
 
+- `pug`, `tailwindcss`
+
 ### Back-end
 
-- `express`
+- `express`, `express-session`, `express-flash`, `morgan`, `bcrypt`, `dotenv`, `mongoose`
+
+### Development
+
+- `babel`, `webpack`
 
 ### Deploy
+
+- `heroku`, `MongoDB Atlas`
 
 ## ☑️ 스크린샷
 
 ## ☑️ 프로젝트를 통해 배운 점
 
 ### Front-end
+
+- async, await 사용을 위한 regenerator-runtime
 
 ### Back-end
 
@@ -56,3 +66,34 @@
   - GitHub 방식으로 회원가입 시 email로 회원가입한 유저와 구별하기 위해서 User Model에 social 필드 추가
 
 ### Deploy
+
+- local에서 사용한 환경변수를 heroku에 등록하는 법
+- babel을 사용한 build
+-
+
+## ☑️ 문제점
+
+- 동영상의 총 재생시간이 제대로 출력되지 않는 문제점 (loadedmetadata event 사용)
+
+  - 기존 방식 : template의 video 태그에 src attribute 작성 `video(src=video.fileURL)`
+    - HTML 파일을 파싱하면서 video가 script 파싱 이전에 로딩이 완료됨 -> script의 event 동작하지 않음
+  - 변경 방식 : url을 dataset으로 전달 후 script에서 src attribute 추가 `video(data-url=video.fileURL)`
+    - script 파싱 이후 video가 로딩되기 때문에 event가 제대로 동작하게 됨
+
+- express-flash로 메세지 출력 후 뒤로가기하면 메세지가 다시 출력되는 문제점
+  - 추후 수정
+- multer error handling
+
+  - 기존 방식 : multer 미들웨어 -> controller `uploadImg.single("avatar"), postMe`
+    - 문제점 : 지정한 fileSize를 초과하는 파일 업로드 시 multer에서 발생한 오류가
+      express에서 catch 되지 않아 서버 죽음
+  - 변경 방식 : multer 자체에서 error handling 방식 사용 -> controller
+
+    ```
+      const upload = uploadImg.single("avatar");
+      upload(req, res, (err) => {})
+    ```
+
+    - 문제점 : multer 미들웨어를 거치고 express에서 req.body 출력 시 undefined 문제
+
+  - 최종 : 미들웨어를 거치지 않고 controller에서 multer error handling과 작업을 동시에 수행하는 것으로 해결

@@ -1,6 +1,7 @@
 import User from "../models/User";
 import bcrypt from "bcrypt";
 import fetch from "node-fetch";
+import { uploadImg } from "../middlewares";
 
 export const getLogin = (req, res) =>
   res.render("user/login", { pageTitle: "로그인" });
@@ -139,11 +140,13 @@ export const userProfile = async (req, res) => {
 export const getMe = (req, res) =>
   res.render("user/me", { pageTitle: "내 정보" });
 
-export const postME = async (req, res) => {
-  try {
+export const postME = (req, res) => {
+  const upload = uploadImg.single("avatar");
+
+  upload(req, res, async (err) => {
     const {
-      file,
       body: { userName },
+      file,
       session: {
         user: { _id, avatarURL },
       },
@@ -152,14 +155,19 @@ export const postME = async (req, res) => {
     const user = await User.findByIdAndUpdate(
       _id,
       {
-        avatarURL: file ? file.path : avatarURL,
+        avatarURL: file ? file.location : avatarURL,
         userName,
       },
       { new: true }
     );
 
-    req.session.user = user;
-    req.flash("info", "내 정보를 수정했습니다.");
-    return res.redirect("/user/me");
-  } catch (error) {}
+    if (err) {
+      req.flash("error", "1MB 이하의 이미지만 업로드할 수 있습니다.");
+      return res.status(400).render("user/me", { pageTitle: "내 정보" });
+    } else {
+      req.session.user = user;
+      req.flash("info", "내 정보를 수정했습니다.");
+      return res.redirect("/user/me");
+    }
+  });
 };

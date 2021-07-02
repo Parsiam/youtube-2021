@@ -130,7 +130,7 @@ const handleView = () => {
 
 const setURL = () => {
   const { url } = video.dataset;
-  video.src = "/" + url;
+  video.src = url;
 };
 
 addEventListener("keypress", handleSpaceBar);

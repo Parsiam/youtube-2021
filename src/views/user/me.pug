@@ -2,9 +2,9 @@ extends ../base
 
 block content  
     form(method="POST" enctype="multipart/form-data" class="flex flex-col").form
-        img(src=localUser.avatarURL.includes("http") ? localUser.avatarURL : "/" + localUser.avatarURL ).mx-auto.rounded-full.w-52.h-52.mb-10
-        label(for="avatar").label 프로필 사진
-        input(type="file" accept="image/*" id="avatar" name="avatar").input
+        img(src=localUser.avatarURL).mx-auto.rounded-full.w-52.h-52.mb-10
         label(for="userName").label 닉네임
         input(type="text" name="userName" placeholder="닉네임" value=localUser.userName id="userName" maxLength=20).input
+        label(for="avatar").label 프로필 사진
+        input(type="file" accept="image/*" id="avatar" name="avatar").input
         button.submitBtn 수정

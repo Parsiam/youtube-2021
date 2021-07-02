@@ -9,6 +9,6 @@ const apiRouter = express.Router();
 
 apiRouter.post("/video/:id/view", addView);
 apiRouter.post("/video/:id/comment", addComment);
-apiRouter.delete("/comment/:id", deleteComment);
+apiRouter.delete("/video/:id/comment/:commentId", deleteComment);
 
 export default apiRouter;

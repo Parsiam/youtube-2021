@@ -7,7 +7,7 @@ block script
 block content 
     if String(video.owner._id) === String(localUser._id)
         a(href=`/video/${video._id}/delete`) 삭제하기
-    div#videoContainer.relative.width-1080
+    div#videoContainer.relative.width-1080.height-607.bg-black
         video(data-url=video.fileURL data-id=video._id).w-full
         div#videoController.w-full.px-5.absolute.bottom-0.pb-6.py-2
             div.flex.mb-5
@@ -28,7 +28,7 @@ block content
         span.text-lg.text-gray-500.mt-2 조회수 #{video.meta.views}회 · #{video.createdAt.getFullYear()}. #{video.createdAt.getMonth()+1}. #{video.createdAt.getDate()}.
     div.flex.border-t.border-b.py-5.my-5.width-1080
         a(href=`/user/${video.owner._id}`)
-            div(style=`background-image:url(${video.owner.avatarURL.includes("http") ? video.owner.avatarURL : "/" + video.owner.avatarURL});background-size:cover;background-position:center; width:70px;height:70px`).rounded-full
+            div(style=`background-image:url(${video.owner.avatarURL});background-size:cover;background-position:center; width:70px;height:70px`).rounded-full
         div.ml-6.w-full
             a(href=`/user/${video.owner._id}`)
                 span.text-lg.font-semibold=video.owner.userName
@@ -46,7 +46,7 @@ block content
     section#commentList.mt-5.width-1080.px-1(data-url=localUser.avatarURL data-name=localUser.userName)
         each comment in video.comments.reverse()
             div.flex.mb-5(data-id=comment._id)
-                div(style=`background-image:url(${comment.owner.avatarURL.includes("http") ? comment.owner.avatarURL : "/" + comment.owner.avatarURL});background-size:cover;background-position:center; width:50px;height:50px`).rounded-full
+                div(style=`background-image:url(${comment.owner.avatarURL});background-size:cover;background-position:center; width:50px;height:50px`).rounded-full
                 div.flex.justify-between.w-full.items-center
                     div.ml-5.flex.flex-col
                         span.font-semibold=comment.owner.userName

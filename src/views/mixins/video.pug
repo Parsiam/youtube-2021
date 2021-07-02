@@ -1,6 +1,6 @@
 mixin video(item)
     a(href=`/video/${item._id}`)
-            div(style=`background-image:url(${"/" + item.thumbnailURL});background-size:cover;background-position:center; width:320px;height:200px`) 
+            div(style=`background-image:url(${item.thumbnailURL});background-size:cover;background-position:center; width:320px;height:200px`) 
             div.flex.mt-4
                 div(style=`background-image:url(${item.owner.avatarURL});background-size:cover;background-position:center; width:50px;height:50px`).rounded-full
                 div.ml-4

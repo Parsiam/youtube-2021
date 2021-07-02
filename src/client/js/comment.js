@@ -9,9 +9,12 @@ const trashBtn = Array.from(document.querySelectorAll(".fa-trash"));
 const deleteComment = async (event) => {
   try {
     const div = event.target.parentNode.parentNode.parentNode;
-    const { id } = div.dataset;
+    const { id: videoId } = video.dataset;
+    const { id: commentId } = div.dataset;
 
-    const response = await fetch(`/api/comment/${id}`, { method: "DELETE" });
+    const response = await fetch(`/api/video/${videoId}/comment/${commentId}`, {
+      method: "DELETE",
+    });
     if (response.status === 204) {
       div.remove();
       commentTotal.textContent = Number(commentTotal.textContent) - 1;

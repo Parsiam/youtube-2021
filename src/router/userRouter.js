@@ -11,7 +11,12 @@ import {
   getMe,
   postME,
 } from "../controller/userController";
-import { loggedInUserOnly, publicOnly, uploadImg } from "../middlewares";
+import {
+  errorHandleUploadImg,
+  loggedInUserOnly,
+  publicOnly,
+  uploadImg,
+} from "../middlewares";
 
 const userRouter = express.Router();
 
@@ -29,11 +34,7 @@ userRouter.get("/github/start", publicOnly, ghStart);
 
 userRouter.get("/github/finish", publicOnly, ghFinish);
 
-userRouter
-  .route("/me")
-  .all(loggedInUserOnly)
-  .get(getMe)
-  .post(uploadImg.single("avatar"), postME);
+userRouter.route("/me").all(loggedInUserOnly).get(getMe).post(postME);
 
 userRouter.get("/:id", userProfile);
 

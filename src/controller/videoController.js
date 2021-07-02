@@ -25,9 +25,9 @@ export const postUpload = async (req, res) => {
     const video = await Video.create({
       title,
       description,
-      hashtags: Video.formatHashtags(hashtags),
-      fileURL: files.video[0].path,
-      thumbnailURL: files.thumbnail[0].path,
+      hashtags: hashtags !== "" ? Video.formatHashtags(hashtags) : "",
+      fileURL: files.video[0].location,
+      thumbnailURL: files.thumbnail[0].location,
       owner: req.session.user._id,
     });
 
@@ -121,13 +121,17 @@ export const addComment = async (req, res) => {
 
 export const deleteComment = async (req, res) => {
   try {
-    const { id } = req.params;
-
-    const comment = await Comment.exists({ _id: id });
-    if (!comment) {
+    const { id, commentId } = req.params;
+    const video = await Video.findById(id);
+    const comment = await Comment.findById(commentId);
+    if (!comment || !video) {
       return res.sendStatus(404);
     }
-    await Comment.findByIdAndDelete(id);
+    video.comments = video.comments.filter(
+      (item) => String(item) !== String(comment._id)
+    );
+    await video.save();
+    await Comment.findByIdAndDelete(commentId);
     return res.sendStatus(204);
   } catch (error) {
     console.log(error);

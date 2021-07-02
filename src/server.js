@@ -16,6 +16,7 @@ app.set("view engine", "pug");
 app.set("views", process.cwd() + "/src/views");
 
 app.use(morgan("tiny"));
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
   session({
@@ -33,7 +34,6 @@ app.use(localsMiddleWare);
 
 app.use("/uploads", express.static("uploads"));
 app.use("/static", express.static("assets"));
-app.use(express.json());
 
 app.use("/", rootRouter);
 app.use("/video", videoRouter);
