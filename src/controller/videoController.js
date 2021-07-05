@@ -1,6 +1,7 @@
 import User from "../models/User";
 import Video from "../models/Video";
 import Comment from "../models/Comment";
+import { s3, uploadVideo } from "../middlewares";
 
 export const home = async (req, res) => {
   try {
@@ -12,8 +13,13 @@ export const home = async (req, res) => {
 export const getUpload = (req, res) =>
   res.render("video/upload", { pageTitle: "동영상 업로드" });
 
-export const postUpload = async (req, res) => {
-  try {
+export const postUpload = (req, res) => {
+  const upload = uploadVideo.fields([
+    { name: "video", maxCount: 1 },
+    { name: "thumbnail", maxCount: 1 },
+  ]);
+
+  upload(req, res, async (err) => {
     const {
       body: { title, description, hashtags },
       files,
@@ -22,23 +28,28 @@ export const postUpload = async (req, res) => {
       },
     } = req;
 
-    const video = await Video.create({
-      title,
-      description,
-      hashtags: hashtags !== "" ? Video.formatHashtags(hashtags) : "",
-      fileURL: files.video[0].location,
-      thumbnailURL: files.thumbnail[0].location,
-      owner: req.session.user._id,
-    });
+    if (err) {
+      req.flash("error", "50MB 이하의 동영상만 업로드할 수 있습니다.");
+      return res
+        .status(400)
+        .render("video/upload", { pageTitle: "동영상 업로드" });
+    } else {
+      const video = await Video.create({
+        title,
+        description,
+        hashtags: hashtags !== "" ? Video.formatHashtags(hashtags) : "",
+        fileURL: files.video[0].location,
+        thumbnailURL: files.thumbnail[0].location,
+        owner: req.session.user._id,
+      });
 
-    const user = await User.findById(_id);
-    user.videos.push(video._id);
-    await user.save();
-    req.flash("info", "동영상을 업로드했습니다.");
-    return res.redirect("/");
-  } catch (error) {
-    console.log(error);
-  }
+      const user = await User.findById(_id);
+      user.videos.push(video._id);
+      await user.save();
+      req.flash("info", "동영상을 업로드했습니다.");
+      return res.redirect("/");
+    }
+  });
 };
 
 export const getDetail = async (req, res) => {
@@ -74,6 +85,22 @@ export const getDelete = async (req, res) => {
       req.flash("error", "동영상을 삭제할 수 없습니다.");
       return res.status(403).redirect("/");
     }
+
+    const fileURL = video.fileURL.split("com/")[1];
+    const thumbnailURL = video.thumbnailURL.split("com/")[1];
+
+    s3.deleteObjects(
+      {
+        Bucket: "metube-2021-upload",
+        Delete: { Objects: [{ Key: fileURL }, { Key: thumbnailURL }] },
+      },
+      (err, data) => {
+        if (err) {
+          throw err;
+        }
+      }
+    );
+
     await Video.findByIdAndDelete(id);
     req.flash("info", "동영상을 삭제했습니다.");
     return res.redirect("/");

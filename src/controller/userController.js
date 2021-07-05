@@ -151,9 +151,10 @@ export const postME = (req, res) => {
         user: { _id, avatarURL },
       },
     } = req;
+    const prevURL = avatarURL;
 
-    const user = await User.findByIdAndUpdate(
-      _id,
+    const user = await User.findOneAndUpdate(
+      { _id },
       {
         avatarURL: file ? file.location : avatarURL,
         userName,
@@ -165,6 +166,9 @@ export const postME = (req, res) => {
       req.flash("error", "1MB 이하의 이미지만 업로드할 수 있습니다.");
       return res.status(400).render("user/me", { pageTitle: "내 정보" });
     } else {
+      if (file) {
+        User.deletePrevAvatar(prevURL);
+      }
       req.session.user = user;
       req.flash("info", "내 정보를 수정했습니다.");
       return res.redirect("/user/me");

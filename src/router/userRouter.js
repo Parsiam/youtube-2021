@@ -11,12 +11,7 @@ import {
   getMe,
   postME,
 } from "../controller/userController";
-import {
-  errorHandleUploadImg,
-  loggedInUserOnly,
-  publicOnly,
-  uploadImg,
-} from "../middlewares";
+import { loggedInUserOnly, publicOnly } from "../middlewares";
 
 const userRouter = express.Router();
 

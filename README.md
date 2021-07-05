@@ -12,7 +12,7 @@
 ### Back-end
 
 - express, pug를 사용한 SSR 구현
-- express-session을 사용한 세션 기반 로그인 구현
+- 세션 기반 로그인 구현(express-session, mongo-store 사용)
 
 ## ☑️ 사용한 기술
 
@@ -22,7 +22,7 @@
 
 ### Back-end
 
-- `express`, `express-session`, `express-flash`, `morgan`, `bcrypt`, `dotenv`, `mongoose`
+- `express`, `express-session`, `express-flash`, `morgan`, `bcrypt`, `dotenv`, `mongoose`, `multer`, `aws-s3`
 
 ### Development
 
@@ -64,6 +64,9 @@
   - 여러 email 중 primary, verifed email을 대표 email로 지정
   - GitHub 유저의 email이 기존 유저의 email과 같다면 계정을 생성하지 않음
   - GitHub 방식으로 회원가입 시 email로 회원가입한 유저와 구별하기 위해서 User Model에 social 필드 추가
+- 이미지, 동영상 파일을 AWS S3 업로드하는 법
+  - 버킷 생성 -> IAM 사용자 생성 -> ACL을 통한 public access 허용
+  - multer를 사용해 fileSize 제한 (이미지 : 1MB, 동영상 : 50MB)
 
 ### Deploy
 
