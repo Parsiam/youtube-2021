@@ -93,12 +93,15 @@
   - 기존 방식 : multer를 미들웨어로 사용
     - 문제점 : 지정한 fileSize를 초과하는 파일 업로드 시 multer에서 발생한 error가 express에서 catch 되지 않아 서버 죽음
 ```
-videoRouter("/upload", uploadImg.single("avatar"), postUpload)
+videoRouter("/upload", uploadVideo.fields([
+    { name: "video", maxCount: 1 },
+    { name: "thumbnail", maxCount: 1 },
+  ]), postUpload)
 ```
   - 변경 방식 : multer 미들웨어에서 error handling을 직접 수행 후 controller로 전달
     - 문제점 : multer 미들웨어를 거치고 controller에서 req.body 출력 시 undefined 문제
 ```
-  const upload = uploadImg.single("avatar");
+  const upload = uploadVideo.fields([{ name: "video", maxCount: 1 }, { name: "thumbnail", maxCount: 1 }])
   upload(req, res, (err) => {})
 ```
   - 최종 : 미들웨어를 거치지 않고 controller에서 multer error handling과 upload를 동시에 수행하는 것으로 해결
