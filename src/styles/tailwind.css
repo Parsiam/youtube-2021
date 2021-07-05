@@ -38,8 +38,8 @@ body {
   @apply bg-blue-700 text-white  mx-auto py-3 px-6 rounded-md text-lg font-medium focus:outline-none hover:opacity-80 transition-opacity;
 }
 
-.icon-hover {
-  @apply hover:scale-125 hover:text-red-600 transform transition-transform cursor-pointer;
+i:hover {
+  @apply hover:scale-125 transform transition-transform cursor-pointer;
 }
 
 @keyframes message {
@@ -67,8 +67,4 @@ body {
 
 .error {
   @apply bg-red-600;
-}
-
-i:hover {
-  cursor: pointer;
 }

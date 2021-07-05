@@ -1,4 +1,20 @@
 extends ../base
+include ../mixins/video
 
-block content 
-    span=user.email
+block content
+    div(class="flex items-center")
+        img(src=user.avatarURL).rounded-full.w-20.h-20.mr-10
+        span.text-xl.font-semibold=user.userName
+    div(class="my-5 bg-gray-300 w-32 px-5 py-3 text-center font-medium rounded-md") 동영상
+    div(class="grid grid-cols-4 gap-y-10")
+        each video in user.videos
+                a(href=`/video/${video._id}`)
+                    div(style=`background-image:url(${video.thumbnailURL});background-size:cover;background-position:center; width:320px;height:200px`) 
+                    div.flex.mt-4
+                        div
+                            div.mb-2.w-64.text-xl.font-medium=video.title.length > 40 ? video.title.substring(0,40) + "..." : video.title
+                            div.text-gray-500.flex.flex-col.font-medium
+                                div=video.owner.userName
+                                span 조회수 #{video.meta.views}회 · #{video.createdAt.getMonth()+1}월 #{video.createdAt.getDate()}일
+        else
+            div 채널에 동영상이 없습니다.                        

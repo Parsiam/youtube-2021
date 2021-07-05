@@ -69,7 +69,7 @@ const handleSubmit = async (event) => {
       </div>
       `;
     const icon = div.querySelector("i");
-    console.log(icon);
+
     icon.addEventListener("click", deleteComment);
     commentList.prepend(div);
     commentTotal.textContent = Number(commentTotal.textContent) + 1;

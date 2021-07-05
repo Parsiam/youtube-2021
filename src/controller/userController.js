@@ -131,7 +131,7 @@ export const ghFinish = async (req, res) => {
 export const userProfile = async (req, res) => {
   try {
     const { id } = req.params;
-    const user = await User.findById(id);
+    const user = await User.findById(id).populate("videos");
 
     return res.render("user/profile.pug", { user });
   } catch (error) {}

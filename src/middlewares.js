@@ -5,6 +5,7 @@ import multerS3 from "multer-s3";
 export const localsMiddleWare = (req, res, next) => {
   res.locals.isLoggedIn = Boolean(req.session.loggedIn);
   res.locals.localUser = req.session.user || {};
+  res.setHeader("Cache-Control", "no-store");
   next();
 };
 
