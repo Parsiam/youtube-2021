@@ -4,15 +4,18 @@
 
 ### Front-end
 
-- pug
+- template engine으로 pug 사용
+- 브라우저에서 동영상 녹화하여 다운로드하는 기능 구현
 - 자바스크립트를 사용하여 커스텀 비디오 플레이어 구현
-- 동영상 재생 완료 시 fetch를 사용하여 백엔드에 POST 요청 전송
--
+- 동영상 재생 완료 시 백엔드에 POST 요청 전송(fetch)
 
 ### Back-end
 
-- express, pug를 사용한 SSR 구현
+- Node.js 기반 SSR 구현
 - 세션 기반 로그인 구현(express-session, mongo-store 사용)
+- GitHub 소셜 로그인 구현
+- multer를 사용하여 이미지, 동영상을 AWS S3에 업로드
+- mongoose를 사용하여 MongoDB 관리
 
 ## ☑️ 사용한 기술
 
@@ -59,6 +62,7 @@
     - 하루가 지나면 세션이 만료되도록 설정
     - middleware를 사용해 세션에 저장된 정보가 res.locals에 저장되도록 설정
     - res.locals를 통해 pug에서 변수에 접근
+  - flash를 사용한 메세지 출력
 - GitHub 소셜 로그인 구현하는 방법
   - 지정 된 URL로 접속하여 토큰을 받아 유저의 email 정보 요청
   - 여러 email 중 primary, verifed email을 대표 email로 지정
@@ -72,7 +76,7 @@
 
 - local에서 사용한 환경변수를 heroku에 등록하는 법
 - babel을 사용한 build
--
+- webpack을 사용한 파일 번들링
 
 ## ☑️ 문제점
 
@@ -87,10 +91,13 @@
   - 추후 수정
 - multer error handling
 
-  - 기존 방식 : multer 미들웨어 -> controller `uploadImg.single("avatar"), postMe`
+  - 기존 방식 : multer를 미들웨어로 사용
+    ```
+    videoRouter("/upload", uploadImg.single("avatar"), postUpload)
+    ```
     - 문제점 : 지정한 fileSize를 초과하는 파일 업로드 시 multer에서 발생한 오류가
       express에서 catch 되지 않아 서버 죽음
-  - 변경 방식 : multer 자체에서 error handling 방식 사용 -> controller
+  - 변경 방식 : multer 미들웨어에서 error handling을 직접 수행 후 controller로 전달
 
     ```
       const upload = uploadImg.single("avatar");
@@ -99,4 +106,4 @@
 
     - 문제점 : multer 미들웨어를 거치고 express에서 req.body 출력 시 undefined 문제
 
-  - 최종 : 미들웨어를 거치지 않고 controller에서 multer error handling과 작업을 동시에 수행하는 것으로 해결
+  - 최종 : 미들웨어를 거치지 않고 controller에서 multer error handling과 upload를 동시에 수행하는 것으로 해결
