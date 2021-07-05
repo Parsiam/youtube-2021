@@ -55,7 +55,7 @@
   - template에서 자바스크립트 사용법
 - express
   - 로그인 여부에 따라 접속 가능한 페이지 제한하는 middleware 구현
-  - multer를 사용한 local에 파일 업로드하는 법
+  - multer를 사용한 local, AWS S3에 파일 업로드하는 법
   - 세션을 사용한 로그인 구현
     - express-session, MongoStore 사용
     - 로그인 시 세션 ID를 쿠키에 저장 / 로그인 상태, 유저 정보를 세션에 저장
@@ -79,31 +79,26 @@
 - webpack을 사용한 파일 번들링
 
 ## ☑️ 문제점
-
-- 동영상의 총 재생시간이 제대로 출력되지 않는 문제점 (loadedmetadata event 사용)
-
+### 1. 동영상의 총 재생시간이 제대로 출력되지 않는 문제점 (loadedmetadata event 사용)
   - 기존 방식 : template의 video 태그에 src attribute 작성 `video(src=video.fileURL)`
     - HTML 파일을 파싱하면서 video가 script 파싱 이전에 로딩이 완료됨 -> script의 event 동작하지 않음
   - 변경 방식 : url을 dataset으로 전달 후 script에서 src attribute 추가 `video(data-url=video.fileURL)`
     - script 파싱 이후 video가 로딩되기 때문에 event가 제대로 동작하게 됨
 
-- express-flash로 메세지 출력 후 뒤로가기하면 메세지가 다시 출력되는 문제점
-  - 추후 수정
-- multer error handling
+### 2. express-flash로 메세지 출력 후 뒤로가기하면 메세지가 다시 출력되는 문제점
+  - header에 Cache-Control 옵션 추가
+
+### 3. multer error handling
 
   - 기존 방식 : multer를 미들웨어로 사용
-    ```
-    videoRouter("/upload", uploadImg.single("avatar"), postUpload)
-    ```
-    - 문제점 : 지정한 fileSize를 초과하는 파일 업로드 시 multer에서 발생한 오류가
-      express에서 catch 되지 않아 서버 죽음
+    - 문제점 : 지정한 fileSize를 초과하는 파일 업로드 시 multer에서 발생한 error가 express에서 catch 되지 않아 서버 죽음
+```
+videoRouter("/upload", uploadImg.single("avatar"), postUpload)
+```
   - 변경 방식 : multer 미들웨어에서 error handling을 직접 수행 후 controller로 전달
-
-    ```
-      const upload = uploadImg.single("avatar");
-      upload(req, res, (err) => {})
-    ```
-
-    - 문제점 : multer 미들웨어를 거치고 express에서 req.body 출력 시 undefined 문제
-
+    - 문제점 : multer 미들웨어를 거치고 controller에서 req.body 출력 시 undefined 문제
+```
+  const upload = uploadImg.single("avatar");
+  upload(req, res, (err) => {})
+```
   - 최종 : 미들웨어를 거치지 않고 controller에서 multer error handling과 upload를 동시에 수행하는 것으로 해결
