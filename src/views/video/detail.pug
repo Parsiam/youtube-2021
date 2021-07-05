@@ -6,7 +6,7 @@ block script
     
 block content 
     div#videoContainer.relative.width-1080.height-607.bg-black
-        video(data-url=video.fileURL data-id=video._id).w-full
+        video(data-url=video.fileURL data-id=video._id).h-full.object-fill.w-full
         div#videoController.w-full.px-5.absolute.bottom-0.pb-6.py-2
             div.flex.mb-5
                 input(type="range" min=0 step=1 value=0)#timeRange.flex-1

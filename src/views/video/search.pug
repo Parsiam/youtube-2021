@@ -5,3 +5,5 @@ block content
     div(class="grid grid-cols-4 gap-y-10")
     each item in videos 
         +video(item)
+    else 
+        div 검색 결과가 없습니다.

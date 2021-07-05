@@ -38,6 +38,8 @@
     "webpack-cli": "^4.7.2"
   },
   "dependencies": {
+    "@ffmpeg/core": "^0.8.5",
+    "@ffmpeg/ffmpeg": "^0.9.7",
     "aws-sdk": "^2.938.0",
     "bcrypt": "^5.0.1",
     "connect-mongo": "^4.4.1",
